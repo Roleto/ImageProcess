@@ -38,6 +38,6 @@ def Cropimage(path, startingnumber):
 
 
 if __name__ == "__main__":
-    Cropimage('', 0)
+    Cropimage('DashCam/Datasets/Images/myImages/myImage8.png', 3553)
     # Cropimage('Datasets/Images/myImages/myImage4.png', 999)
     # ennél tartok foolytasd még a 2,3,4 van hátra mégse nem mindegyik kép jó kezd előrol

@@ -2,19 +2,19 @@ import cv2
 from train import processFiles, trainSVM
 from detector import Detector
 pos_dires = {
-    "far": "../../Kéfeldolgozás/Datasets/Images/far-images",
-    "left": "../../Kéfeldolgozás/Datasets/Images/left-images",
-    "middle": "../../Kéfeldolgozás/Datasets/Images/middleclose-images",
-    "right": "../../Kéfeldolgozás/Datasets/Images/right-images"
+    "far": "DashCam/Datasets/Images/far-images",
+    "left": "DashCam/Datasets/Images/left-images",
+    "middle": "DashCam/Datasets/Images/middleclose-images",
+    "right": "DashCam/Datasets/Images/right-images"
 }
 # "D:\Egyetem\Kéfeldolgozásr\Datasets"
-pos_dir = "../../Kéfeldolgozás/Datasets/Images/vehicles"
-neg_dir = "../../Kéfeldolgozás/Datasets/Images/non-vehicles"
+pos_dir = "DashCam/Datasets/Images/vehicles"
+neg_dir = "DashCam/Datasets/Images/non-vehicles"
 
 # video_file = "Datasets/Videos/Cars.mp4"
 # video_file = "Datasets/Videos/daschcam.mp4"
 # video_file = "Datasets/Videos/nagyobb_daschcam.mp4"
-video_file = "../..//Képfeldolgozás/Datasets/Videos/hd_daschcam_cropped.mp4"
+video_file = "DashCam/Datasets/Videos/hd_daschcam_cropped.mp4"
 # video_file = "Datasets/Videos/hd_daschcam.mp4"
 # "D:\Egyetem\Képfeldolgozás\Datasets"
 
@@ -49,8 +49,8 @@ def myExemple():
                                        hog_bins=20, hist_bins=16, spatial_size=(20, 20),
                                        output_file=True, output_filename=feature_middle_data_filename)
 
-    classifier_far_data_filename = "Datasets/TrainedData/classifier_far_data.pkl"
-    classifier_middle_data_filename = "Datasets/TrainedData/classifier_middle_data.pkl"
+    classifier_far_data_filename = "DashCam/Datasets/TrainedData/classifier_far_data.pkl"
+    classifier_middle_data_filename = "DashCam/Datasets/TrainedData/classifier_middle_data.pkl"
 
     far_classifier_data = trainSVM(feature_data=far_feature_data, output_file=True,
                                    output_filename=classifier_far_data_filename)
@@ -224,20 +224,20 @@ def DashCam(keys=["All"], train=True, heatmap=True):
     middle_neg_dir = pos_dires["middle"]+"/non-vehicles"
     right_neg_dir = pos_dires["right"]+"/non-vehicles"
     left_neg_dir = pos_dires["left"]+"/non-vehicles"
-    feature_far_data_filename = "Datasets/TrainedData/myfarfile.pkl"
-    classifier_far_data_filename = "Datasets/TrainedData/classifier_far_data.pkl"
-    feature_middle_data_filename = "Datasets/TrainedData/mymiddlefile.pkl"
-    classifier_middle_data_filename = "Datasets/TrainedData/classifier_middle_data.pkl"
-    feature_right_data_filename = "Datasets/TrainedData/myrightfile.pkl"
-    classifier_right_data_filename = "Datasets/TrainedData/classifier_right_data.pkl"
-    feature_left_data_filename = "Datasets/TrainedData/myleftfile.pkl"
-    classifier_left_data_filename = "Datasets/TrainedData/classifier_left_data.pkl"
+    feature_far_data_filename = "DashCam/Datasets/TrainedData/myfarfile.pkl"
+    classifier_far_data_filename = "DashCam/Datasets/TrainedData/classifier_far_data.pkl"
+    feature_middle_data_filename = "DashCam/Datasets/TrainedData/mymiddlefile.pkl"
+    classifier_middle_data_filename = "DashCam/Datasets/TrainedData/classifier_middle_data.pkl"
+    feature_right_data_filename = "DashCam/Datasets/TrainedData/myrightfile.pkl"
+    classifier_right_data_filename = "DashCam/Datasets/TrainedData/classifier_right_data.pkl"
+    feature_left_data_filename = "DashCam/Datasets/TrainedData/myleftfile.pkl"
+    classifier_left_data_filename = "DashCam/Datasets/TrainedData/classifier_left_data.pkl"
 
     classifier_datas = {}
 
     if keys[0] == "All" or "far" in keys:
         if (train):
-            far_feature_data = processFiles(far_pos_dir, far_neg_dir, recurse=True,
+            far_feature_data = processFiles(far_pos_dir, far_neg_dir, recurse=False,
                                             color_space="YCrCb", channels=[0, 1, 2], hog_features=True,
                                             hist_features=True, spatial_features=True, hog_lib="cv",
                                             size=(16, 16), pix_per_cell=(2, 2), cells_per_block=(2, 2),
@@ -272,9 +272,15 @@ def DashCam(keys=["All"], train=True, heatmap=True):
             left_feature_data = processFiles(left_pos_dir, left_neg_dir, recurse=False,
                                              color_space="YCrCb", channels=[0, 1, 2], hog_features=True,
                                              hist_features=True, spatial_features=True, hog_lib="cv",
-                                             size=(64, 64), pix_per_cell=(16, 16), cells_per_block=(4, 4),
+                                             size=(32, 32), pix_per_cell=(4, 4), cells_per_block=(4, 4),
                                              hog_bins=20, hist_bins=16, spatial_size=(20, 20),
                                              output_file=True, output_filename=feature_left_data_filename)
+            # left_feature_data = processFiles(left_pos_dir, left_neg_dir, recurse=False,
+            #                                  color_space="YCrCb", channels=[0, 1, 2], hog_features=True,
+            #                                  hist_features=True, spatial_features=True, hog_lib="cv",
+            #                                  size=(32, 32), pix_per_cell=(4, 4), cells_per_block=(2, 2),
+            #                                  hog_bins=20, hist_bins=16, spatial_size=(20, 20),
+            #                                  output_file=True, output_filename=feature_left_data_filename)
 
             left_classifier_data = trainSVM(
                 feature_data=left_feature_data, output_file=True, output_filename=classifier_left_data_filename)
@@ -290,8 +296,8 @@ def DashCam(keys=["All"], train=True, heatmap=True):
                                                hist_features=True, spatial_features=True, hog_lib="cv",
                                                size=(64, 64), pix_per_cell=(16, 16), cells_per_block=(4, 4),
                                                hog_bins=20, hist_bins=16, spatial_size=(20, 20),
-                                               output_file=True, output_filename=feature_left_data_filename)
-            #    output_file=True, output_filename=feature_middle_data_filename)
+                                               output_file=True, output_filename=feature_middle_data_filename)
+            #    output_file=True, output_filename=feature_left_data_filename)
 
             middle_classifier_data = trainSVM(feature_data=middle_feature_data, output_file=True,
                                               output_filename=classifier_middle_data_filename)
@@ -322,19 +328,19 @@ def DashCam(keys=["All"], train=True, heatmap=True):
         "far": .7,
         "middle": .3,
         "right": .5,
-        "left": .4
+        "left": .3
     }
     y_steps = {  # 640 height
         "far": .3,
         "middle": .5,
         "right": .25,
-        "left": .5
+        "left": .7
     }
     scales = {
         "far": 1.5,
         "middle": 1.7,
         "right": 1,
-        "left": 1.6
+        "left": 1.5
     }
     detector = Detector(init_sizes=init_sizes, x_overlaps=x_overlaps, y_steps=y_steps,
                         x_ranges=x_ranges, y_ranges=y_ranges, scales=scales)
@@ -380,19 +386,4 @@ def trainedSVM():
 
 
 if __name__ == "__main__":
-    # example1()
-    # example2()
-    # example3()
-    # example4()
-    # example5()
-    # myExemple()
-    # OnlyLeft()
     DashCam(["left", "far"])
-    # drawRect(x,y,x_w,y_w)
-    # drawRect(0, 150, 200, 510, (0, 0, 0))  # left y = 0,0.3125 x = 0.235,0.5625
-    # drawRect(200, 200, 160, 460, (0, 0, 0)) # middle y = 0.3125,.5625 x = 0.56,1
-    # drawRect(400, 150, 260, 260, (0, 0, 0))  # right y =0.625,1 x = .5626,1
-    # drawRect(150, 150, 200, 50, (0, 0, 0))  # far y = 0.3125,.5625 x = 0.4,0.55
-    # drawRect([0, 400, 200, 200], [150, 150, 200, 150], [200, 240, 200, 200], [400, 400, 400, 50], [(0, 255, 0), (255, 255, 0), (255, 0, 0), (0, 0, 0)])
-    # FarMidleMethod()
-    # trainedExemple()
